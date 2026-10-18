@@ -83,7 +83,7 @@ Yasal uyarı ("yatırım danışmanlığı kapsamında değildir") fiyatlandırm
 
 ## 3. Bilanço ve rasyolar
 
-- Bilanço, gelir tablosu, nakit akış tablosu (çeyreklik/yıllık) ⬜
+- Bilanço, gelir tablosu, nakit akış tablosu: 4 yıllık yıllık özet, TL / $ görünümü ✅ · çeyreklik ⬜ · banka (UFRS) formatı ⬜
 - Enflasyon muhasebesi: düzeltilmiş ve düzeltilmemiş tablolar yan yana, reel/nominal büyüme ⬜
 - Çarpanlar: F/K, PD/DD, FD/FAVÖK, FD/Satış ✅
 - Kârlılık: ROE, ROA, brüt/faaliyet/net marj ✅
@@ -119,7 +119,7 @@ Yasal uyarı ("yatırım danışmanlığı kapsamında değildir") fiyatlandırm
 
 - Şirket özet raporu ⬜
 - Sektör ve endeks karşılaştırmaları ⬜
-- Halka arz (IPO) verileri ⬜
+- Halka arz: aktif/gerçekleşen arzlar (fiyat, büyüklük, katılımcı, aracı kurum, arz sonrası getiri), SPK taslak başvuruları ✅
 - "Dip fiyattaki şirketler" gibi hazır listeler ⬜
 - Piyasa paneli: endeks, kur, emtia ve gram altın kartları, grup sekmeleri ✅ · kullanıcı özelleştirmesi ⬜
 - Takvim: yaklaşan temettüler, sermaye artırımları, son olaylar ✅ · son açıklanan bilançolar ⬜

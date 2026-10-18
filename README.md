@@ -24,6 +24,7 @@ mali tablolar 7 günde bir yenilenir. Çıktılar: `public/data/stocks.json`, `p
 | Yıllık bilanço, gelir tablosu, nakit akışı | İş Yatırım MaliTablo |
 | Haftalık fiyat geçmişi, temettüler, endeks/kur/emtia kartları | Yahoo Finance |
 | Temettü ve sermaye artırımı takvimi | İş Yatırım "Temel Değerler ve Oranlar" |
+| Halka arzlar ve taslak başvurular | halkarz.com |
 
 Bu kaynaklar resmi API değildir; kişisel kullanım ve geliştirme içindir. Uygulama ticari
 olarak yayımlanacaksa lisanslı bir veri sağlayıcıya geçilmelidir.

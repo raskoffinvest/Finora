@@ -24,6 +24,7 @@ import {
   supportResistance,
 } from './lib/metrics.mjs'
 import { parseTables, trNumber } from './lib/html.mjs'
+import { parseIpoDetail, parseIpoIndex, parseTrDates } from './lib/ipo.mjs'
 
 const ROOT = path.resolve(import.meta.dirname, '..')
 const CACHE = path.join(ROOT, '.cache')
@@ -50,7 +51,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 // Önbellek süreleri (saat): fiyatlar her çalıştırmada, grafikler yarım günde, mali tablolar
 // haftada bir yenilenir.
-const MAX_AGE = { prices: 0, charts: 12, statements: 24 * 7 }
+const MAX_AGE = { prices: 0, charts: 12, statements: 24 * 7, ipoIndex: 6, ipoDetail: 24 }
 
 async function cachedFetch(key, url, { json = true, maxAgeHours = Infinity } = {}) {
   const file = path.join(CACHE, key)
@@ -200,6 +201,38 @@ async function fetchQuote({ symbol, name, group }) {
   return { symbol, name, group, price: last, changePct: round((last / prev - 1) * 100), time: result.meta.regularMarketTime, history }
 }
 
+// --- Halka arzlar (halkarz.com) --------------------------------------------------------
+
+async function fetchIpos() {
+  const html = await cachedFetch('halkarz/index.html', 'https://halkarz.com/', { json: false, maxAgeHours: MAX_AGE.ipoIndex })
+  const items = parseIpoIndex(html)
+  const listed = []
+  for (const item of items.filter((i) => i.section === 'listed')) {
+    const slug = new URL(item.url).pathname.replace(/\W+/g, '_')
+    let detail = {}
+    try {
+      detail = parseIpoDetail(
+        await cachedFetch(`halkarz/detail/${slug}.html`, item.url, { json: false, maxAgeHours: MAX_AGE.ipoDetail }),
+      )
+    } catch (err) {
+      console.log(`  uyarı: ${item.name} ayrıntısı alınamadı (${err.message})`)
+    }
+    const days = parseTrDates(item.subscriptionText ?? '')
+    listed.push({
+      name: item.name,
+      ticker: item.ticker ?? detail.tickerFromDetail ?? null,
+      url: item.url,
+      subscriptionText: item.subscriptionText,
+      subscriptionStart: days[0] ?? null,
+      subscriptionEnd: days.at(-1) ?? null,
+      ...detail,
+    })
+    await sleep(150)
+  }
+  const drafts = items.filter((i) => i.section === 'draft').map((i) => ({ name: i.name, url: i.url }))
+  return { listed, drafts }
+}
+
 async function fetchMarket(actions) {
   const quotes = (await Promise.all(MARKET_SYMBOLS.map(fetchQuote))).filter(Boolean)
   // Gram altın (TL) = ons altın ($) × USD/TRY ÷ 31,1035
@@ -230,7 +263,7 @@ async function fetchMarket(actions) {
   const benchmark = (xu100?.bars ?? []).slice(-52).map((b) => ({ t: b.t, close: round(b.close) }))
   await writeFile(
     MARKET_OUT,
-    JSON.stringify({ generatedAt: new Date().toISOString(), quotes, actions, benchmark }),
+    JSON.stringify({ generatedAt: new Date().toISOString(), quotes, actions, benchmark, ipos: await fetchIpos() }),
   )
   console.log(`Yazıldı: ${path.relative(ROOT, MARKET_OUT)} (${quotes.length} kart, ${actions.length} şirket olayı)`)
 }

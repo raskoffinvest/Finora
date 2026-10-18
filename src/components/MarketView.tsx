@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import type { CorporateAction, MarketDataset, MarketQuote, Stock } from '../types'
 import { fmt, fmtBigTl } from '../lib/format'
+import { ipoStatus } from '../lib/ipo'
+import { IpoTable } from './IpoView'
 import { Change, Panel, Sparkline, Tabs } from './ui'
 
 type QuoteGroup = 'Tümü' | MarketQuote['group']
@@ -229,6 +231,21 @@ export function MarketView({
         <CalendarBox actions={market.actions} stocksByTicker={stocksByTicker} onSelect={onSelect} />
         <MoversBox stocks={stocks} onSelect={onSelect} />
       </div>
+      <Panel
+        title="Son halka arzlar"
+        actions={
+          <a href="#/halka-arz" className="text-sm text-[var(--brand)] hover:underline">
+            Tümü
+          </a>
+        }
+      >
+        <IpoTable
+          compact
+          ipos={(market.ipos?.listed ?? []).filter((i) => ipoStatus(i) !== 'ertelendi').slice(0, 6)}
+          stocksByTicker={stocksByTicker}
+          onSelect={onSelect}
+        />
+      </Panel>
     </div>
   )
 }

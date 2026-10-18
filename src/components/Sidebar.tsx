@@ -2,7 +2,9 @@ import type { Route } from '../lib/useHashRoute'
 
 const NAV: { route: Route; label: string; icon: string; pro?: boolean }[] = [
   { route: 'piyasa', label: 'Piyasa', icon: '◔' },
+  { route: 'bilancolar', label: 'Bilançolar', icon: '☰' },
   { route: 'tarama', label: 'Hisse Tarama', icon: '⧩' },
+  { route: 'halka-arz', label: 'Halka Arz', icon: '⇪' },
   { route: 'gercek-deger', label: 'Gerçek Değer', icon: '≈', pro: true },
   { route: 'yapay-zeka', label: 'Yapay Zekâ', icon: '✧', pro: true },
   { route: 'portfoy', label: 'Portföy Cüzdan', icon: '▤', pro: true },

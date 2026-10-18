@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { AiView } from './components/AiView'
 import { Footer } from './components/Footer'
 import { Hero } from './components/Hero'
+import { IpoView } from './components/IpoView'
 import { MarketView } from './components/MarketView'
 import { PortfolioView } from './components/PortfolioView'
 import { PricingSection } from './components/PricingSection'
@@ -9,6 +10,7 @@ import { RightRail } from './components/RightRail'
 import { ScreenerFilters } from './components/ScreenerFilters'
 import { Sidebar } from './components/Sidebar'
 import { StockDetailPanel } from './components/StockDetailPanel'
+import { StatementsView } from './components/StatementsView'
 import { StockTable } from './components/StockTable'
 import { ValuationView } from './components/ValuationView'
 import { passesScreener, type ScreenerFilterState } from './lib/scoring'
@@ -90,6 +92,14 @@ function App() {
                   </p>
                   <StockTable stocks={filteredStocks} favorites={favorites} onSelect={setSelectedStock} />
                 </div>
+              )}
+
+              {route === 'bilancolar' && stockData.status === 'ready' && (
+                <StatementsView data={stockData.data} onSelect={setSelectedStock} />
+              )}
+
+              {route === 'halka-arz' && market && stockData.status === 'ready' && (
+                <IpoView market={market} stocksByTicker={stocksByTicker} onSelect={setSelectedStock} />
               )}
 
               {route === 'gercek-deger' && stockData.status === 'ready' && (

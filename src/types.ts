@@ -27,11 +27,15 @@ export interface Ratios {
 }
 
 // Yıllık mali tablo kalemleri; dizi indeksi 0 = son mali yıl (StockDataset.fiscalYears ile aynı sıra)
-export type Financials = Record<
-  | 'totalAssets' | 'cash' | 'shortTermDebt' | 'longTermDebt' | 'equity' | 'parentEquity'
-  | 'revenue' | 'operatingProfit' | 'netIncome' | 'parentNetIncome' | 'operatingCashFlow' | 'capex' | 'freeCashFlow',
-  (number | null)[]
->
+// Kalemler scripts/lib/metrics.mjs içindeki CODES ile aynıdır.
+export type FinancialItem =
+  | 'currentAssets' | 'cash' | 'receivables' | 'ppe' | 'totalAssets'
+  | 'currentLiabilities' | 'shortTermDebt' | 'longTermLiabilities' | 'longTermDebt'
+  | 'equity' | 'parentEquity' | 'paidCapital' | 'pastEarnings' | 'periodEarnings'
+  | 'revenue' | 'cogs' | 'grossProfit' | 'marketingExpense' | 'adminExpense' | 'operatingProfit'
+  | 'netIncome' | 'parentNetIncome' | 'depreciation'
+  | 'operatingCashFlow' | 'capex' | 'freeCashFlow' | 'dividendsPaid' | 'capitalIncrease'
+export type Financials = Record<FinancialItem, (number | null)[]>
 
 // scripts/fetch-data.mjs tarafından üretilen public/data/stocks.json kaydı
 export interface Stock {
@@ -89,11 +93,30 @@ export interface CorporateAction {
   ratioPct?: number | null // sermaye artırım oranı
 }
 
+export interface Ipo {
+  name: string
+  ticker: string | null
+  url: string
+  subscriptionText: string | null // ör. "9-10-11 Eylül 2026" veya "Ertelendi"
+  subscriptionStart: string | null
+  subscriptionEnd: string | null
+  ipoPrice?: number | null
+  lots?: number | null
+  sizeTl?: number | null
+  method?: string | null
+  broker?: string | null
+  market?: string | null
+  freeFloatPct?: number | null
+  firstTradeDate?: string | null
+  participants?: number | null
+}
+
 export interface MarketDataset {
   generatedAt: string
   quotes: MarketQuote[]
   actions: CorporateAction[]
   benchmark: PricePoint[] // BIST 100, son 52 hafta haftalık
+  ipos: { listed: Ipo[]; drafts: { name: string; url: string }[] }
 }
 
 export interface StockDataset {
