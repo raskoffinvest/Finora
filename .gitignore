@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Veri hattı önbelleği
+.cache
+
+# Üretilen veri (npm run data); üçüncü taraf verisi yeniden dağıtılmaz
+public/data

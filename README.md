@@ -1,32 +1,58 @@
-# React + TypeScript + Vite
+# Finora
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Borsa İstanbul şirketleri için açık formüllü temel analiz uygulaması (React + TypeScript + Vite).
 
-Currently, two official plugins are available:
+## Çalıştırma
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run data   # BIST verisini çeker, public/data/stocks.json üretir (~10 dk, ilk çalıştırmada)
+npm run dev    # http://localhost:5173
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+`npm run data` seçenekleri: `-- --only THYAO,ASELS` (belirli hisseler), `-- --limit 20`,
+`-- --market-only` (yalnızca piyasa paneli, birkaç saniye), `-- --refresh` (önbelleği yok sayar).
+
+Ham yanıtlar `.cache/` altında tutulur: fiyatlar her çalıştırmada, haftalık grafikler 12 saatte,
+mali tablolar 7 günde bir yenilenir. Çıktılar: `public/data/stocks.json`, `public/data/market.json`.
+
+## Veri kaynakları
+
+| Veri | Kaynak |
+|---|---|
+| Hisse listesi, sektör, fiyat, piyasa değeri, halka açıklık, F/K, PD/DD, FD/FAVÖK, getiriler | İş Yatırım "Temel Değerler ve Oranlar" |
+| Yıllık bilanço, gelir tablosu, nakit akışı | İş Yatırım MaliTablo |
+| Haftalık fiyat geçmişi, temettüler, endeks/kur/emtia kartları | Yahoo Finance |
+| Temettü ve sermaye artırımı takvimi | İş Yatırım "Temel Değerler ve Oranlar" |
+
+Bu kaynaklar resmi API değildir; kişisel kullanım ve geliştirme içindir. Uygulama ticari
+olarak yayımlanacaksa lisanslı bir veri sağlayıcıya geçilmelidir.
+
+## Skorlar
+
+Hepsi `scripts/lib/metrics.mjs` ve `scripts/fetch-data.mjs` içinde açık formüllerle hesaplanır.
+
+- **Piotroski F-Score (0–9)** — 9 ikili kriter; sermaye artırımı kriteri bedelsiz artırımları
+  cezalandırmamak için nakit akışındaki "Sermaye Artırımı" kalemine bakar.
+- **Altman Z-Score** — 1968 modeli; > 2,99 güvenli, 1,81–2,99 gri bölge.
+- **Beneish M-Score** — 8 değişkenli model; −2,22 üstü manipülasyon riski.
+- **Graham değeri** — √(22,5 × HBK × HBDD), hisse adedi = ödenmiş sermaye.
+- **Değerleme Skoru (0–100)** — F/K, PD/DD ve FD/FAVÖK'ün sektör içi yüzdeliği; yüksek = ucuz.
+- **Finora Skoru (0–10)** — ROE, net marj, büyüme, F-Score, Z-Score, borçluluk ve değerlemenin
+  ağırlıklı ortalaması.
+- **Destek/direnç** — son 52 haftalık pivot dip ve tepeler.
+
+Banka ve finans şirketlerinde (UFRS tabloları) F/Z/M skorları hesaplanmaz.
+
+## Pro araçlar
+
+- **Gerçek Değer** — İNA (dolar bazlı: nakit akışları yıl sonu kuruyla $'a, sonuç güncel kurla TL'ye),
+  Graham ve sektör medyan çarpanları; modellerin medyanı ve "model uyumu" (en uç iki model 3 kattan
+  fazla ayrışıyorsa düşük). Kod: `src/lib/valuation.ts`.
+- **Portföy Cüzdan** — pozisyonlar tarayıcıda (`localStorage`) saklanır.
+- **Portföy Analizi** — sektör dağılımı, ağırlıklı skorlar, 52 haftalık oynaklık ve BIST 100'e göre
+  beta, yoğunlaşma ve skor uyarıları. Kod: `src/lib/portfolioAnalysis.ts`.
+
+## Yol haritası
+
+Finbosoft'un özellik envanteri ve Finora'daki karşılıkları: [docs/feature-inventory.md](docs/feature-inventory.md).

@@ -1,15 +1,14 @@
-export function Footer() {
+export function Footer({ sources }: { sources: string[] }) {
   return (
     <footer className="border-t border-[var(--gridline)] px-4 py-8 text-xs text-[var(--text-muted)] sm:px-6">
       <div className="mx-auto max-w-6xl space-y-2">
         <p>
-          Finora burada yalnızca bir ürün konsepti/demo olarak sunulmaktadır. Gösterilen
-          şirket adları, ticker'lar ve finansal veriler tamamen kurgusaldır, gerçek bir
-          şirketi temsil etmez.
+          Piyasa ve finansal tablo verileri halka açık kaynaklardan otomatik derlenir; gecikmeli veya
+          hatalı olabilir.{sources.length > 0 && ` Kaynaklar: ${sources.join(' · ')}.`}
         </p>
         <p>
-          İçerikler yatırım tavsiyesi niteliği taşımaz; yalnızca bilgilendirme ve ürün
-          tanıtımı amaçlıdır.
+          Burada yer alan bilgi, skor ve analizler yatırım danışmanlığı kapsamında değildir; yalnızca
+          bilgilendirme amaçlıdır.
         </p>
         <p>© {new Date().getFullYear()} Finora</p>
       </div>

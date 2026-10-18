@@ -4,7 +4,7 @@ const PLANS = [
     price: '0 TL',
     description: 'Tüm temel piyasa ve şirket verilerine erişim.',
     features: [
-      'Fiyat Skoru (ucuz/pahalı göstergesi)',
+      'Değerleme Skoru (sektörüne göre ucuz/pahalı)',
       'F-Score ile finansal sağlık taraması',
       'Z-Score ile iflas riski göstergesi',
       'TL ve $ bazlı temettü geçmişi',
@@ -15,7 +15,7 @@ const PLANS = [
     price: '₺417/ay',
     description: 'Yapay zekâ destekli derinlemesine analiz ve portföy araçları.',
     features: [
-      'ProScore ile kapsamlı kalite skoru',
+      'Finora Skoru ve Beneish M-Score',
       'Yapay zekâ destekli şirket yorumları',
       'Gerçek Değer Analizi',
       'Portföy bazlı risk/getiri analizi',

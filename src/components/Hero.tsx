@@ -1,15 +1,15 @@
-const STATS = [
-  { label: 'Taranan BIST şirketi', value: '400+' },
-  { label: 'Hesaplanan skor modeli', value: '4' },
-  { label: 'Ücretsiz / Pro katman', value: '2' },
-]
+export function Hero({ companyCount }: { companyCount: number }) {
+  const stats = [
+    { label: 'Taranan BIST şirketi', value: companyCount > 0 ? String(companyCount) : '—' },
+    { label: 'Açık formüllü skor modeli', value: '5' },
+    { label: 'Ücretsiz / Pro katman', value: '2' },
+  ]
 
-export function Hero() {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-10 pt-14 sm:px-6">
       <div className="max-w-2xl">
         <p className="mb-3 inline-block rounded-full bg-[var(--brand)]/10 px-3 py-1 text-xs font-medium text-[var(--brand-ink)]">
-          BIST için yapay zekâ destekli temel analiz
+          BIST için açık formüllü temel analiz
         </p>
         <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
           Bilançoyu okumak yerine{' '}
@@ -21,21 +21,22 @@ export function Hero() {
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <a
-            href="#tarama"
+            href="#/tarama"
             className="rounded-lg bg-[var(--brand)] px-5 py-2.5 text-sm font-medium text-white hover:bg-[var(--brand-ink)]"
           >
             Hisseleri Taramaya Başla
           </a>
-          <a
-            href="#fiyatlandirma"
+          <button
+            type="button"
+            onClick={() => document.getElementById('fiyatlandirma')?.scrollIntoView({ behavior: 'smooth' })}
             className="rounded-lg border border-[var(--border-hairline)] px-5 py-2.5 text-sm font-medium hover:bg-black/[0.03]"
           >
             Pro Özellikleri Gör
-          </a>
+          </button>
         </div>
       </div>
       <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-[var(--gridline)] pt-6 sm:max-w-xl">
-        {STATS.map((stat) => (
+        {stats.map((stat) => (
           <div key={stat.label}>
             <dt className="text-xs text-[var(--text-muted)]">{stat.label}</dt>
             <dd className="text-xl font-semibold tabular-nums">{stat.value}</dd>
