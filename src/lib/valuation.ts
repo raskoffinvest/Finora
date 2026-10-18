@@ -6,9 +6,10 @@ export interface DcfParams {
   growthPct: number // ilk 5 yıl yıllık serbest nakit akışı büyümesi ($)
   discountPct: number // iskonto oranı ($ bazlı özsermaye maliyeti)
   terminalPct: number // sonsuz büyüme
+  dividendGrowthPct: number // temettü indirgeme modelinde sonsuz temettü büyümesi ($)
 }
 
-export const DEFAULT_DCF: DcfParams = { growthPct: 8, discountPct: 14, terminalPct: 3 }
+export const DEFAULT_DCF: DcfParams = { growthPct: 8, discountPct: 14, terminalPct: 3, dividendGrowthPct: 3 }
 
 export interface DcfResult {
   baseFcfUsd: number // son 3 yılın ortalama serbest nakit akışı
@@ -103,6 +104,19 @@ export function sectorMultipleValue(stock: Stock, medians?: SectorMedians): numb
   if (stock.pe && stock.pe > 0 && medians.pe) parts.push((stock.price / stock.pe) * medians.pe)
   if (stock.pb && stock.pb > 0 && medians.pb) parts.push((stock.price / stock.pb) * medians.pb)
   return parts.length ? parts.reduce((a, b) => a + b, 0) / parts.length : null
+}
+
+// Temettü indirgeme (Gordon) modeli, $ bazlı: D1 = son iki tam yılın ortalama hisse başı
+// temettüsü × (1 + g); değer = D1 / (r − g), güncel kurla TL'ye çevrilir.
+export function dividendDiscount(stock: Stock, data: StockDataset, p: DcfParams, fullYear: number): number | null {
+  if (!data.usdTryNow || p.discountPct <= p.dividendGrowthPct) return null
+  const byYear = new Map((stock.dividendHistory ?? []).map((d) => [d.year, d.usd]))
+  const recent = [byYear.get(fullYear) ?? 0, byYear.get(fullYear - 1) ?? 0]
+  if (recent[0] <= 0) return null // son yıl ödeme yoksa model anlamsız
+  const d0 = (recent[0] + recent[1]) / 2
+  const g = p.dividendGrowthPct / 100
+  const perShareUsd = (d0 * (1 + g)) / (p.discountPct / 100 - g)
+  return perShareUsd * data.usdTryNow
 }
 
 export function upsidePct(value: number | null | undefined, price: number | null | undefined) {

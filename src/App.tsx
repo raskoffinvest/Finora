@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { AiView } from './components/AiView'
+import { DividendView } from './components/DividendView'
 import { Footer } from './components/Footer'
 import { Hero } from './components/Hero'
 import { IpoView } from './components/IpoView'
@@ -100,6 +101,10 @@ function App() {
 
               {route === 'halka-arz' && market && stockData.status === 'ready' && (
                 <IpoView market={market} stocksByTicker={stocksByTicker} onSelect={setSelectedStock} />
+              )}
+
+              {route === 'temettu' && stockData.status === 'ready' && (
+                <DividendView stocks={stocks} portfolio={portfolio} onSelect={setSelectedStock} />
               )}
 
               {route === 'gercek-deger' && stockData.status === 'ready' && (

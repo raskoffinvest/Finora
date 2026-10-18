@@ -50,6 +50,9 @@ Banka ve finans şirketlerinde (UFRS tabloları) F/Z/M skorları hesaplanmaz.
 - **Gerçek Değer** — İNA (dolar bazlı: nakit akışları yıl sonu kuruyla $'a, sonuç güncel kurla TL'ye),
   Graham ve sektör medyan çarpanları; modellerin medyanı ve "model uyumu" (en uç iki model 3 kattan
   fazla ayrışıyorsa düşük). Kod: `src/lib/valuation.ts`.
+- **Temettü** — Temettü Skoru (süreklilik %30, 5 yıllık $ büyüme %25, dağıtım oranı %20, serbest nakit
+  akışıyla karşılanma %15, verim %10) ve bütçe/sektör sınırıyla temettü portföyü oluşturucu.
+  Kod: `src/lib/dividends.ts`. Gerçek Değer'e $ bazlı temettü indirgeme (Gordon) modeli eklendi.
 - **Portföy Cüzdan** — pozisyonlar tarayıcıda (`localStorage`) saklanır.
 - **Portföy Analizi** — sektör dağılımı, ağırlıklı skorlar, 52 haftalık oynaklık ve BIST 100'e göre
   beta, yoğunlaşma ve skor uyarıları. Kod: `src/lib/portfolioAnalysis.ts`.

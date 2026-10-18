@@ -78,7 +78,7 @@ Yasal uyarı ("yatırım danışmanlığı kapsamında değildir") fiyatlandırm
 |---|---|
 | İndirgenmiş Nakit Akımı (İNA/DCF), $ bazlı, varsayımlar ayarlanabilir | ✅ |
 | Graham değeri √(22.5 × HBK × HBDD) | ✅ |
-| Finbo Model 1 / Model 2 (tescilli) → Finora: sektör medyan çarpanları modeli ✅ · temettü indirgeme ⬜ |
+| Finbo Model 1 / Model 2 (tescilli) → Finora: sektör medyan çarpanları ✅ · temettü indirgeme ($ bazlı Gordon) ✅ |
 | Modellerin yan yana karşılaştırması, medyan, model uyumu ve potansiyel getiri sıralaması | ✅ |
 
 ## 3. Bilanço ve rasyolar
@@ -96,8 +96,9 @@ Yasal uyarı ("yatırım danışmanlığı kapsamında değildir") fiyatlandırm
 
 - TL bazlı hisse başı temettü geçmişi ✅
 - USD bazlı temettü geçmişi ✅
-- Enflasyona göre düzeltilmiş temettü ⬜
-- Temettü verimi (12 ay) ✅ · dağıtım oranı ⬜
+- Enflasyona göre düzeltilmiş temettü ⬜ (yerine $ bazlı büyüme kullanılıyor)
+- Temettü Skoru: süreklilik, 5 yıllık $ büyüme, dağıtım oranı, SNA karşılama, verim ✅
+- Temettü verimi (12 ay), dağıtım oranı ✅
 
 ## 5. Hisse tarama / filtreleme (ücretsiz)
 
@@ -127,7 +128,7 @@ Yasal uyarı ("yatırım danışmanlığı kapsamında değildir") fiyatlandırm
 - Favoriler / izleme listesi (20 sembol, tarayıcıda saklanır) ✅
 - Portföy Cüzdan: pozisyon girişi, düzenleme, değer ve K/Z (tarayıcıda saklanır) ✅
 - Gelecek tahminlemeleri: kârlılık ve bilanço projeksiyonu (Pro) ⬜
-- Temettü portföyü oluşturucu ⬜
+- Temettü portföyü oluşturucu (bütçe, hisse sayısı, sektör sınırı; Cüzdan'a aktarım) ✅
 
 ## 8. Yapay zekâ (Pro)
 

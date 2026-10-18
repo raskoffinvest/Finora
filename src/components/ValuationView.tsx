@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import type { Stock, StockDataset } from '../types'
 import { fmt, fmtTl } from '../lib/format'
-import { DEFAULT_DCF, dcf, sectorMedians, sectorMultipleValue, upsidePct, type DcfParams } from '../lib/valuation'
+import { lastFullYear } from '../lib/dividends'
+import { DEFAULT_DCF, dcf, dividendDiscount, sectorMedians, sectorMultipleValue, upsidePct, type DcfParams } from '../lib/valuation'
 import { Change, Panel } from './ui'
 
 interface Row {
@@ -9,6 +10,7 @@ interface Row {
   graham: number | null
   dcf: number | null
   sector: number | null
+  ddm: number | null
   average: number | null
   upside: number | null
   models: number
@@ -74,12 +76,14 @@ export function ValuationView({ data, onSelect }: { data: StockDataset; onSelect
         const g = stock.grahamValue ?? null
         const d = dcf(stock, data, params)?.perShareTl ?? null
         const s = sectorMultipleValue(stock, medians.get(stock.sector))
-        const c = combine([g, d, s])
+        const m = dividendDiscount(stock, data, params, lastFullYear())
+        const c = combine([g, d, s, m])
         return {
           stock,
           graham: g,
           dcf: d,
           sector: s,
+          ddm: m,
           average: c.value,
           upside: upsidePct(c.value, stock.price),
           models: c.models,
@@ -104,8 +108,8 @@ export function ValuationView({ data, onSelect }: { data: StockDataset; onSelect
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Gerçek Değer</h1>
         <p className="mt-1 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Üç bağımsız değerleme modeli yan yana: dolar bazlı indirgenmiş nakit akımı (İNA), Graham değeri ve
-          sektör çarpanları. Modeller farklı varsayımlara dayanır; aralarındaki fark belirsizliğin göstergesidir.
+          Dört bağımsız değerleme modeli yan yana: dolar bazlı indirgenmiş nakit akımı (İNA), Graham değeri,
+          sektör çarpanları ve temettü indirgeme. Modeller farklı varsayımlara dayanır; aralarındaki fark belirsizliğin göstergesidir.
         </p>
       </div>
 
@@ -154,7 +158,7 @@ export function ValuationView({ data, onSelect }: { data: StockDataset; onSelect
                 </span>
               )}
             </div>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <ModelCard
                 title="İndirgenmiş nakit akımı ($ bazlı)"
                 value={selected.dcf}
@@ -181,11 +185,18 @@ export function ValuationView({ data, onSelect }: { data: StockDataset; onSelect
                     : 'Sektör verisi yok.'
                 }
               />
+              <ModelCard
+                title="Temettü indirgeme ($ bazlı)"
+                value={selected.ddm}
+                price={selected.stock.price}
+                note="Son iki yılın ortalama $ temettüsü, sonsuz büyüme varsayımıyla indirgenir. Düzenli temettü ödeyenler için anlamlıdır."
+              />
             </div>
-            <div className="grid gap-4 rounded-lg bg-black/[0.03] p-4 sm:grid-cols-3">
+            <div className="grid gap-4 rounded-lg bg-black/[0.03] p-4 sm:grid-cols-2 xl:grid-cols-4">
               <Slider label="5 yıllık SNA büyümesi ($)" value={params.growthPct} min={-5} max={30} onChange={(v) => setParams({ ...params, growthPct: v })} />
               <Slider label="İskonto oranı ($)" value={params.discountPct} min={8} max={25} onChange={(v) => setParams({ ...params, discountPct: v })} />
               <Slider label="Sonsuz büyüme ($)" value={params.terminalPct} min={0} max={6} onChange={(v) => setParams({ ...params, terminalPct: v })} />
+              <Slider label="Temettü büyümesi ($)" value={params.dividendGrowthPct} min={0} max={8} onChange={(v) => setParams({ ...params, dividendGrowthPct: v })} />
             </div>
             <p className="text-xs text-[var(--text-muted)]">
               İNA varsayımları tüm tabloyu etkiler. Nakit akışları {data.fiscalYears[0]} ve önceki yılların yıl sonu
@@ -222,6 +233,7 @@ export function ValuationView({ data, onSelect }: { data: StockDataset; onSelect
                 <th className="px-3 py-2 text-right font-medium">İNA</th>
                 <th className="px-3 py-2 text-right font-medium">Graham</th>
                 <th className="px-3 py-2 text-right font-medium">Sektör</th>
+                <th className="px-3 py-2 text-right font-medium">Temettü</th>
                 <th className="px-3 py-2 text-right font-medium">Medyan</th>
                 <th className="px-4 py-2 text-right font-medium">Potansiyel</th>
               </tr>
@@ -244,6 +256,7 @@ export function ValuationView({ data, onSelect }: { data: StockDataset; onSelect
                   <td className="px-3 py-2 text-right tabular-nums">{fmt(r.dcf)}</td>
                   <td className="px-3 py-2 text-right tabular-nums">{fmt(r.graham)}</td>
                   <td className="px-3 py-2 text-right tabular-nums">{fmt(r.sector)}</td>
+                  <td className="px-3 py-2 text-right tabular-nums">{fmt(r.ddm)}</td>
                   <td className="px-3 py-2 text-right tabular-nums">{fmt(r.average)}</td>
                   <td className="px-4 py-2 text-right">
                     <Change value={r.upside} />
