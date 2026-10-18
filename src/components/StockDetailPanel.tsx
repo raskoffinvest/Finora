@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import type { CorporateAction, Stock } from '../types'
 import { fmt, fmtBigTl, fmtPct, fmtTl } from '../lib/format'
 import { fScoreTier, mScoreTier, qualityTier, valuationLabel, valuationTier, zScoreTier } from '../lib/scoring'
+import { stockPayload } from '../lib/ai'
+import { AiCommentary } from './AiCommentary'
 import { DividendChart } from './DividendChart'
 import { PriceChart } from './PriceChart'
 import { ScoreBadge } from './ScoreBadge'
@@ -100,6 +102,15 @@ export function StockDetailPanel({
             Banka ve finans şirketlerinde F-Score, Z-Score ve M-Score anlamlı olmadığı için hesaplanmaz.
           </p>
         )}
+
+        <Section title="Yapay zekâ yorumu">
+          <AiCommentary
+            key={stock.ticker}
+            kind="stock"
+            payload={stockPayload(stock, fiscalYear)}
+            cta="Gemini ile yorum oluştur"
+          />
+        </Section>
 
         <dl className="mt-6 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
           <Field label="Fiyat" value={fmtTl(stock.price)} />

@@ -4,6 +4,7 @@ const NAV: { route: Route; label: string; icon: string; pro?: boolean }[] = [
   { route: 'piyasa', label: 'Piyasa', icon: '◔' },
   { route: 'tarama', label: 'Hisse Tarama', icon: '⧩' },
   { route: 'gercek-deger', label: 'Gerçek Değer', icon: '≈', pro: true },
+  { route: 'yapay-zeka', label: 'Yapay Zekâ', icon: '✧', pro: true },
   { route: 'portfoy', label: 'Portföy Cüzdan', icon: '▤', pro: true },
   { route: 'portfoy-analizi', label: 'Portföy Analizi', icon: '◑', pro: true },
   { route: 'abonelik', label: 'Abonelik', icon: '✦' },

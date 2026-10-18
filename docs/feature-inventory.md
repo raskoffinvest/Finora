@@ -131,8 +131,8 @@ Yasal uyarı ("yatırım danışmanlığı kapsamında değildir") fiyatlandırm
 
 ## 8. Yapay zekâ (Pro)
 
-- Şirket yorumu: güçlü yönler, riskler, büyüme potansiyeli (Claude API ile, verilere dayalı) ⬜
-- Portföy analizi: sektör dağılımı, ağırlıklı skorlar, oynaklık, beta, risk uyarıları ✅ · yapay zekâ yorumu ⬜
+- Şirket yorumu: güçlü yönler, riskler, büyüme potansiyeli (Gemini, yalnızca Finora verisiyle) ✅
+- Portföy analizi: sektör dağılımı, ağırlıklı skorlar, oynaklık, beta, risk uyarıları ✅ · yapay zekâ yorumu (Gemini) ✅
 
 ## 9. Hesap ve ticari
 

@@ -53,6 +53,19 @@ Banka ve finans şirketlerinde (UFRS tabloları) F/Z/M skorları hesaplanmaz.
 - **Portföy Analizi** — sektör dağılımı, ağırlıklı skorlar, 52 haftalık oynaklık ve BIST 100'e göre
   beta, yoğunlaşma ve skor uyarıları. Kod: `src/lib/portfolioAnalysis.ts`.
 
+## Yapay zekâ (Gemini)
+
+Şirket paneli, **Yapay Zekâ** ekranı ve Portföy Analizi, Gemini ile yorum üretebilir.
+
+```bash
+cp .env.example .env.local   # sonra GEMINI_API_KEY değerini yazın
+npm run dev                  # sunucuyu yeniden başlatın
+```
+
+Tarayıcı `/api/ai` uç noktasını çağırır; bu uç nokta Vite sunucusunda çalışır (`server/ai.mjs`) ve
+anahtar yalnızca sunucuda kalır, istemci paketine girmez. Modele yalnızca Finora'nın hesapladığı
+skor ve oranlar gönderilir; yorumlar yatırım tavsiyesi değildir.
+
 ## Yol haritası
 
 Finbosoft'un özellik envanteri ve Finora'daki karşılıkları: [docs/feature-inventory.md](docs/feature-inventory.md).

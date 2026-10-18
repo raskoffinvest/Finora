@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { AiView } from './components/AiView'
 import { Footer } from './components/Footer'
 import { Hero } from './components/Hero'
 import { MarketView } from './components/MarketView'
@@ -93,6 +94,10 @@ function App() {
 
               {route === 'gercek-deger' && stockData.status === 'ready' && (
                 <ValuationView data={stockData.data} onSelect={setSelectedStock} />
+              )}
+
+              {route === 'yapay-zeka' && stockData.status === 'ready' && (
+                <AiView data={stockData.data} onSelect={setSelectedStock} />
               )}
 
               {(route === 'portfoy' || route === 'portfoy-analizi') && stockData.status === 'ready' && (

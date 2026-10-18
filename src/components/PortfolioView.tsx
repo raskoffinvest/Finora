@@ -1,7 +1,9 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import type { PricePoint, Stock } from '../types'
 import { fmt, fmtBigTl, fmtPct, fmtTl } from '../lib/format'
+import { portfolioPayload } from '../lib/ai'
 import { analyzePortfolio } from '../lib/portfolioAnalysis'
+import { AiCommentary } from './AiCommentary'
 import { fScoreTier, qualityTier, valuationTier } from '../lib/scoring'
 import type { Portfolio } from '../lib/usePortfolio'
 import { ScoreBadge } from './ScoreBadge'
@@ -268,6 +270,17 @@ export function PortfolioView({
                 )}
               </Panel>
             </div>
+
+            <Panel title="Yapay zekâ ile portföy yorumu">
+              <div className="p-4">
+                <AiCommentary
+                  key={analysis.holdings.map((h) => `${h.position.ticker}:${h.position.quantity}`).join(',')}
+                  kind="portfolio"
+                  payload={portfolioPayload(analysis)}
+                  cta="Gemini ile portföy yorumu oluştur"
+                />
+              </div>
+            </Panel>
 
             <p className="text-xs text-[var(--text-muted)]">
               Oynaklık ve beta, pozisyonların son 52 haftalık haftalık getirilerinden bugünkü ağırlıklarla hesaplanır.
